@@ -12,7 +12,7 @@ def model(est):
 
 est = PySRRegressor(
     niterations=1_000_000_000,
-    ncyclesperiteration=2_500,
+    ncycles_per_iteration=2_500,
     population_size=100,
     populations=max(15, cpu_count()*2),
     # budget 10 minutes for compile time,
@@ -67,7 +67,10 @@ hyper_params = [{}]
 eval_kwargs = {
     "test_params": dict(
         niterations=3,
-        ncyclesperiteration=500,
+        ncycles_per_iteration=500,
         populations=3,
-    )
+    ),
+    # 禁用归一化以获得真实系数
+    "scale_x": False,
+    "scale_y": False,
 }

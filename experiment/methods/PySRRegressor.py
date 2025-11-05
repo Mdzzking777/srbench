@@ -12,7 +12,7 @@ def model(est):
 
 est = PySRRegressor(
     niterations=1_000_000_000,
-    ncyclesperiteration=2_500,
+    ncycles_per_iteration=2_500,
     population_size=100,
     populations=max(15, cpu_count()*2),
     # budget 10 minutes for compile time,
