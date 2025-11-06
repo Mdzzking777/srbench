@@ -10,12 +10,27 @@ Timeout handling
 MAXTIME = 60
 
 import signal
+import platform
+
 class SimplifyTimeOutException(Exception):
     pass
+
+IS_WINDOWS = platform.system() == 'Windows'
 
 def alarm_handler(signum, frame):
     print(f"raising SimplifyTimeOutException")
     raise SimplifyTimeOutException
+
+def set_simplify_timeout(seconds):
+    """跨平台设置simplify超时"""
+    if not IS_WINDOWS and hasattr(signal, 'SIGALRM'):
+        signal.signal(signal.SIGALRM, alarm_handler)
+        signal.alarm(seconds)
+
+def cancel_simplify_timeout():
+    """取消simplify超时"""
+    if not IS_WINDOWS and hasattr(signal, 'SIGALRM'):
+        signal.alarm(0)
 
 
 """
@@ -55,13 +70,14 @@ def get_symbolic_model(pred_model, local_dict):
     sp_model = sp.parse_expr(pred_model, local_dict=local_dict)
     sp_model = round_floats(sp_model)
 
-    signal.signal(signal.SIGALRM, alarm_handler)
-    signal.alarm(MAXTIME) # maximum time, defined above
+    set_simplify_timeout(MAXTIME)  # 使用跨平台超时
     try:
         sp_model = sp.simplify(sp_model)
     except Exception as e:
         print('Warning: simplify failed. Msg:',e)
         pass
+    finally:
+        cancel_simplify_timeout()
     return sp_model
 
 def simplicity(pred_model, feature_names):
@@ -92,18 +108,19 @@ def symbolic_equivalence(true_model, pred_model, local_dict):
 
         # check if we can skip simplification
         if not diff_const and not frac_const:
-            signal.signal(signal.SIGALRM, alarm_handler)
-            signal.alarm(MAXTIME) # maximum time, defined above
+            set_simplify_timeout(MAXTIME)  # 使用跨平台超时
             try:
                 if not diff_const:
                     sym_diff = sp.simplify(sym_diff)
-                    diff_const=sym_diff.is_constant() 
+                    diff_const=sym_diff.is_constant()
                 if not frac_const:
                     sym_frac = sp.simplify(sym_frac)
-                    frac_const=sym_frac.is_constant() 
+                    frac_const=sym_frac.is_constant()
             except Exception as e:
                 print('Warning: simplify failed. Msg:',e)
                 pass
+            finally:
+                cancel_simplify_timeout()
     except Exception as e:
         print('const checking failed.')
         diff_const=False

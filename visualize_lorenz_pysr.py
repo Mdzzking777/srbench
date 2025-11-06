@@ -107,7 +107,7 @@ def visualize_comparison():
     plt.tight_layout()
 
     # 保存图片
-    output_path = 'outputs/lorenz_comparison.png'
+    output_path = 'outputs/lorenz_comparison_pysr.png'
     plt.savefig(output_path, dpi=300, bbox_inches='tight')
     print(f"\n✅ 可视化已保存到: {output_path}")
 

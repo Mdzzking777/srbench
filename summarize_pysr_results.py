@@ -24,7 +24,7 @@ for eq in equations:
     print(f"{'='*80}")
 
     # 读取Hall of Fame
-    hof_path = f'outputs/lorenz_{eq}/hall_of_fame.csv'
+    hof_path = f'outputs/lorenz_{eq}_pysr/hall_of_fame.csv'
 
     if os.path.exists(hof_path):
         df = pd.read_csv(hof_path)
@@ -53,7 +53,7 @@ for eq in equations:
         print(f"   公式: {best['Equation']}")
 
         # 检查是否有checkpoint文件（包含运行时间）
-        checkpoint_path = f'outputs/lorenz_{eq}/checkpoint.pkl'
+        checkpoint_path = f'outputs/lorenz_{eq}_pysr/checkpoint.pkl'
         if os.path.exists(checkpoint_path):
             import pickle
             try:

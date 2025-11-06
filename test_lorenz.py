@@ -21,7 +21,7 @@ print("=" * 60)
 commands = [
     {
         'name': '完整运行 lorenz_dx (PySR) - 预期: σ(y-x)',
-        'output_name': 'lorenz_dx',
+        'output_name': 'lorenz_dx_pysr',
         'cmd': [
             sys.executable,
             'experiment/evaluate_model.py',
@@ -34,7 +34,7 @@ commands = [
     },
     {
         'name': '完整运行 lorenz_dy (PySR) - 预期: x(ρ-z) - y',
-        'output_name': 'lorenz_dy',
+        'output_name': 'lorenz_dy_pysr',
         'cmd': [
             sys.executable,
             'experiment/evaluate_model.py',
@@ -47,7 +47,7 @@ commands = [
     },
     {
         'name': '完整运行 lorenz_dz (PySR) - 预期: xy - βz',
-        'output_name': 'lorenz_dz',
+        'output_name': 'lorenz_dz_pysr',
         'cmd': [
             sys.executable,
             'experiment/evaluate_model.py',
@@ -127,5 +127,5 @@ for test in commands:
 print("\n" + "=" * 60)
 print("测试完成！")
 print("结果保存在: results/lorenz/")
-print("Hall of Fame 保存在: outputs/lorenz_dx/, outputs/lorenz_dy/, outputs/lorenz_dz/")
+print("Hall of Fame 保存在: outputs/lorenz_dx_pysr/, outputs/lorenz_dy_pysr/, outputs/lorenz_dz_pysr/")
 print("=" * 60)

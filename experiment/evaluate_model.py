@@ -1,3 +1,8 @@
+import os
+# 设置Julia环境到用户目录（避免权限问题）
+os.environ['JULIA_DEPOT_PATH'] = os.path.expanduser('~/.julia')
+os.environ['PYTHON_JULIACALL_DEPOT'] = os.path.expanduser('~/.julia')
+
 import sys
 import itertools
 import pandas as pd
@@ -15,7 +20,6 @@ from read_file import read_file
 import pdb
 import numpy as np
 import json
-import os
 import inspect
 from utils import jsonify
 from symbolic_utils import get_sym_model
@@ -23,12 +27,29 @@ from symbolic_utils import get_sym_model
 from metrics.evaluation import simplicity
 
 import signal
+import platform
+
 class TimeOutException(Exception):
     pass
+
+# Windows不支持SIGALRM，使用条件导入
+IS_WINDOWS = platform.system() == 'Windows'
 
 def alarm_handler(signum, frame):
     print(f"raising TimeOutException")
     raise TimeOutException
+
+def set_timeout(seconds):
+    """跨平台设置超时"""
+    if not IS_WINDOWS and hasattr(signal, 'SIGALRM'):
+        signal.signal(signal.SIGALRM, alarm_handler)
+        signal.alarm(seconds)
+    # Windows上不设置超时，依赖PySR自己的timeout_in_seconds参数
+
+def cancel_timeout():
+    """取消超时"""
+    if not IS_WINDOWS and hasattr(signal, 'SIGALRM'):
+        signal.alarm(0)
 
 def set_env_vars(n_jobs):
     os.environ['OMP_NUM_THREADS'] = n_jobs 
@@ -162,12 +183,13 @@ def evaluate_model(
     print('y_train:',y_train_scaled.shape)
     print('training',est)
     t0t = time.time()
-    signal.signal(signal.SIGALRM, alarm_handler)
-    signal.alarm(MAXTIME) # maximum time, defined above
+    set_timeout(MAXTIME)  # 使用跨平台超时函数
     try:
         est.fit(X_train_scaled, y_train_scaled)
     except TimeOutException:
         print('WARNING: fitting timed out')
+    finally:
+        cancel_timeout()  # 取消超时
 
     time_time = time.time() - t0t
     print('Training time measure:', time_time)
