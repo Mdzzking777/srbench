@@ -1,0 +1,119 @@
+================================================================================
+EQL SIMPLIFIED Lorenz Equation Discovery Results Summary
+================================================================================
+Function set: id;mul ONLY (minimal set for polynomial systems)
+================================================================================
+
+================================================================================
+Lorenz DX Equation (SIMPLIFIED)
+================================================================================
+
+Theoretical formula: dx/dt = 10(y - x)  [σ=10]
+
+EQL SIMPLIFIED discovered formula:
+────────────────────────────────────────────────────────────────────────────────
+Model: -10.0*x + 10.0*y + 0.00201
+
+Test MSE: 1.915016e-11
+Test R²: 1.000000
+Test MAE: 3.226975e-06
+
+================================================================================
+Lorenz DY Equation (SIMPLIFIED)
+================================================================================
+
+Theoretical formula: dy/dt = x(28 - z) - y  [ρ=28]
+
+EQL SIMPLIFIED discovered formula:
+────────────────────────────────────────────────────────────────────────────────
+Model: -3.20959833345842*x*(0.311*z - 8.36) + 1.15*x - 1.0*y
+
+Test MSE: 1.408521e-10
+Test R²: 1.000000
+Test MAE: 9.854026e-06
+
+================================================================================
+Lorenz DZ Equation (SIMPLIFIED)
+================================================================================
+
+Theoretical formula: dz/dt = xy - (8/3)z  [β≈2.67]
+
+EQL SIMPLIFIED discovered formula:
+────────────────────────────────────────────────────────────────────────────────
+Model: 0.869*x*(1.15*y + 2.6) - 2.26*x - 2.67*z - 0.013
+
+Test MSE: 4.085663e-07
+Test R²: 1.000000
+Test MAE: 4.483953e-04
+
+================================================================================
+Overall Summary
+================================================================================
+Equation   MSE             R²         Complexity      Model
+────────────────────────────────────────────────────────────────────────────────
+dx         1.915016e-11    1.000000   N/A             -10.0*x + 10.0*y + 0.00201
+dy         1.408521e-10    1.000000   N/A             -3.20959833345842*x*(0.311*z - 8.36) + 1.15*x - 1....
+dz         4.085663e-07    1.000000   N/A             0.869*x*(1.15*y + 2.6) - 2.26*x - 2.67*z - 0.013
+
+================================================================================
+Theoretical Formula Comparison
+================================================================================
+
+DX:
+  Theoretical: 10(y - x)
+  Note:        Linear multiplication form
+  Discovered:  -10.0*x + 10.0*y + 0.00201
+  MSE:         1.915016e-11
+  R²:          1.000000
+
+DY:
+  Theoretical: x(28 - z) - y
+  Note:        Bilinear with subtraction
+  Discovered:  -3.20959833345842*x*(0.311*z - 8.36) + 1.15*x - 1.0*y
+  MSE:         1.408521e-10
+  R²:          1.000000
+
+DZ:
+  Theoretical: xy - 2.67z
+  Note:        Bilinear with coefficient 8/3
+  Discovered:  0.869*x*(1.15*y + 2.6) - 2.26*x - 2.67*z - 0.013
+  MSE:         4.085663e-07
+  R²:          1.000000
+
+================================================================================
+Algorithm Characteristics (SIMPLIFIED)
+================================================================================
+EQL (Equation Learner) is a neural network-based symbolic regression method.
+Key features of SIMPLIFIED run:
+  • Uses JAX for automatic differentiation
+  • Learns symbolic expressions through gradient descent
+  • Enabled functions: id, mul ONLY (minimal polynomial set)
+  • Addition/subtraction implemented via network weights
+  • Grid search over regularization and layers only
+  • Much faster than full function set (fewer configurations to test)
+
+================================================================================
+Comparison: SIMPLIFIED vs FULL Function Set
+================================================================================
+SIMPLIFIED (id;mul):        9 configurations (3 reg × 3 layers × 1 function set)
+FULL (with sin,cos,etc):   54 configurations (3 reg × 3 layers × 6 function sets)
+
+Expectation:
+  • SIMPLIFIED: Faster training, simpler models, potentially cleaner equations
+  • FULL: Slower training, more complex search space, risk of overfitting
+
+Since Lorenz equations only need polynomial terms (x, y, z, xy, xz),
+the SIMPLIFIED version should perform equally well or better.
+
+================================================================================
+Summary
+================================================================================
+EQL SIMPLIFIED attempted to discover the Lorenz attractor equations
+using only the minimal function set (id;mul) needed for polynomial systems.
+Performance depends on:
+  • Network architecture (layers)
+  • Regularization strength
+  • Training iterations (50,000 per configuration)
+  • Grid search over reduced hyperparameter space
+================================================================================
+

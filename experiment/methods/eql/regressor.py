@@ -20,14 +20,13 @@ base = EQL(n_iter=50000)  # Increased iterations for better convergence
 # Hyperparameter grid optimized for Lorenz
 # Note: EQL implements addition/subtraction through neural network weights
 # Available functions: sin, cos, id, mul, div, sqrt, exp, log, square, cube
+# SIMPLIFIED VERSION: Only using id;mul (the minimum needed for Lorenz equations)
 hp = {
     "reg": (1e-5, 1e-4, 1e-3),  # Regularization strength
-    "n_layers": (1, 2),          # Network depth
+    "n_layers": (1, 2, 3),       # Network depth
     "functions": (
-        # Simple multiplicative structure for Lorenz
+        # Basic arithmetic ONLY - minimal set for polynomial systems
         "id;mul;id;mul",
-        # With more layers for complex interactions
-        "id;mul;id;mul;id;mul",
     ),
 }
 
